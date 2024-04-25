@@ -53,7 +53,7 @@ function Signup() {
 
     axios
       .post(
-        "https://holiday-api-zj3a.onrender.com/api/v1/auth/signup",
+        "http://localhost:100/api/v1/auth/signup",
         formData
       )
       .then((response) => {
@@ -79,8 +79,8 @@ function Signup() {
           <div className="signup-title">
             <h2 className="signup-htitle">Sign Up</h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus
-              expedita nam amet veniam labori
+              Welcome to our platform. Please fill out the form to create an 
+              account. If you already have an account, you can <a href="/login">login here</a>.
             </p>
           </div>
           <div className="signup-form">
@@ -200,10 +200,8 @@ function Signup() {
               </div>
               <div className="signup-cta-text">
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Ducimus, corrupti exercitationem? Magni, doloribus.
-                  Consectetur doloribus at laborum veniam fugiat fugit nulla,
-                  excepturi, ut illo ad iusto corrupti ullam deleniti amet?
+                  we have more upcomming events, please join us to get more
+                  information about our events
                 </p>
                 <h2>
                   You're new here? <span>create an account</span>
