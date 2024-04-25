@@ -161,7 +161,7 @@ function Login() {
                   Log in to your account to access all the amazing features and
                   services we offer.
                 </p>
-                <Link to="/dashboard">
+                <Link to="/">
                   <h3>Return to home</h3>
                 </Link>
               </div>
