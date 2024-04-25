@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "./navbar";
 import logoImage from "../assets/logo.png";
-import whiteLogo from "../assets/white-logo.png";
+import whiteLogo from "../assets/logo.png";
 import logoIconWhite from "../assets/logo-icon-white.svg";
 
 function Header() {
@@ -36,31 +36,6 @@ function Header() {
   const menuItems = [
     { title: "Home", link: "/" },
     { title: "About", link: "/" },
-    {
-      title: "Destination",
-      link: "/",
-      submenu: [
-        { title: "Destination", link: "/" },
-        { title: "Destination Details", link: "/" },
-      ],
-    },
-    {
-      title: "Tour",
-      link: "/",
-      submenu: [
-        { title: "Tour", link: "/tour" },
-        { title: "Tour Detail", link: "/tour-detail" },
-      ],
-    },
-    {
-      title: "Blog",
-      link: "/",
-      submenu: [
-        { title: "Blog", link: "/" },
-        { title: "Blog Details", link: "/" },
-      ],
-    },
-    { title: "Contact us", link: "/contact" },
   ];
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -96,11 +71,11 @@ function Header() {
             <div className="two-col">
               <ul className="contact-list-item">
                 <li>
-                  <a href="mailto:holidayplanner@gmail.com">
+                  <a href="mailto:eventplanner@gmail.com">
                     <span className="icon">
                       <FaEnvelope />
                     </span>
-                    <span className="text">holidayplanners@gmail.com</span>
+                    <span className="text">eventplanners@gmail.com</span>
                   </a>
                 </li>
                 <li>
