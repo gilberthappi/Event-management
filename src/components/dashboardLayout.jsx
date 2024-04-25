@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import DashboardNav from "./dashboardNav";
 
-function dashboardLyout() {
+function dashboardLayout() {
   return (
     <>
       <DashboardNav />
@@ -11,4 +11,4 @@ function dashboardLyout() {
   );
 }
 
-export default dashboardLyout;
+export default dashboardLayout;

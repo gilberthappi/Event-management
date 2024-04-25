@@ -1,151 +1,61 @@
 import React, { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
-import { Bar } from "react-chartjs-2";
 import axios from "axios";
+import { Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
-  BsGrid,
-  BsChevronDown,
-  BsWechat,
   BsArrowRightShort,
-  BsDash,
-  BsFillChatDotsFill,
 } from "react-icons/bs";
-import { GoDotFill } from "react-icons/go";
-import { RxBorderDashed } from "react-icons/rx";
-import { HiOutlineLogout } from "react-icons/hi";
-import { CiLocationOn, CiPlane } from "react-icons/ci";
+
 import { BiTimer, BiCreditCard, BiSlider } from "react-icons/bi";
 import {
-  FaRegCalendarAlt,
   FaUmbrellaBeach,
-  FaStar,
+  FaGem,
   FaUsers,
 } from "react-icons/fa";
 import {
   MdOutlineLightMode,
-  MdSettings,
-  MdOutlineMarkUnreadChatAlt,
 } from "react-icons/md";
 
-import userImg from "../assets/admin/logo-icon.svg";
 import dbBg from "../assets/dashboard-div-bg.png";
-import switzerland from "../assets/dashboard-div-switzerland.png";
-import zermat from "../assets/dashboard-div-zermat.png";
 import friend1 from "../assets/friend1.jpeg";
-import friend2 from "../assets/friend2.jpg";
+
 
 import "../style/dashboard.css";
 
-function dashboard() {
-  // //allowing only logged in user to access dashboard
-  // if(!localStorage.getItem("login")){
-  //   alert("Please log into your account first!!")
-  //   window.location.href="/login"
-  // } else{
-  //   window.location.href="/dashboard"
-  // }
-
+function Dashboard() {
   const [numUsers, setNumUsers] = useState(0);
+  const [numberOfEvents, setNumberOfEvents] = useState(null);
 
-  // Fetch the number of users from the API
   useEffect(() => {
     axios
-      .get("https://holiday-api-zj3a.onrender.com/api/v1/auth/users")
+      .get("http://localhost:100/api/v1/auth/users")
       .then((response) => {
-        // Update the state with the number of users from the API response
         setNumUsers(response.data.length);
       })
       .catch((error) => {
         console.error("Error fetching number of users: ", error);
       });
-  }, []);
 
-  const [numberOfTours, setNumberOfTours] = useState(null);
-
-  // Function to fetch the number of tours from the API
-  const fetchNumberOfTours = async () => {
-    try {
-      const response = await axios.get(
-        "https://holiday-api-zj3a.onrender.com/api/v1/tour/all"
-      );
-      // Extract the number of tours from the response data
-      const totalTours = response.data.length;
-      setNumberOfTours(totalTours);
-    } catch (error) {
-      console.error("Error fetching number of tours: ", error);
-    }
-  };
-
-  useEffect(() => {
-    // Fetch the number of tours when the component mounts
-    fetchNumberOfTours();
-  }, []);
-
-  // Define chart data
-  const data = {
-    labels: ["January", "February", "March", "April", "May"],
-    datasets: [
-      {
-        label: "Total expected tours",
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-        data: [88, 66, 33, 55, 99],
-      },
-      {
-        label: "Tours done(occured)",
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-        data: [32, 45, 25, 18, 36],
-      },
-    ],
-  };
-
-  const options = {
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
-
-  useEffect(() => {
-    const canvas = document.getElementById("yourCanvasElement");
-
-    if (canvas) {
-      const chartInstance = new Chart(canvas, {
-        type: "bar",
-        data: data,
-        options: options,
+    axios
+      .get("http://localhost:100/api/v1/event/all")
+      .then((response) => {
+        setNumberOfEvents(response.data.length);
+      })
+      .catch((error) => {
+        console.error("Error fetching number of events: ", error);
       });
-
-      return () => {
-        // Destroy the chart instance when the component unmounts
-        chartInstance.destroy();
-      };
-    }
   }, []);
 
-  const initialTime = { hours: 16, minutes: 16, seconds: 30 };
-  const [time, setTime] = useState(initialTime);
-
-  const formatTime = (time) => {
-    const hoursStr = String(time.hours).padStart(2, "0");
-    const minutesStr = String(time.minutes).padStart(2, "0");
-    const secondsStr = String(time.seconds).padStart(2, "0");
-    return `${hoursStr}:${minutesStr}:${secondsStr}`;
-  };
+  const [time, setTime] = useState({ hours: 16, minutes: 16, seconds: 30 });
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (time.hours === 0 && time.minutes === 0 && time.seconds === 0) {
         clearInterval(interval);
-        // Timer has reached zero
       } else {
         const newTime = { ...time };
-
         if (newTime.seconds > 0) {
           newTime.seconds -= 1;
         } else {
@@ -158,13 +68,59 @@ function dashboard() {
             newTime.seconds = 59;
           }
         }
-
         setTime(newTime);
       }
     }, 1000);
 
     return () => clearInterval(interval);
   }, [time]);
+
+  const formatTime = (time) => {
+    const hoursStr = String(time.hours).padStart(2, "0");
+    const minutesStr = String(time.minutes).padStart(2, "0");
+    const secondsStr = String(time.seconds).padStart(2, "0");
+    return `${hoursStr}:${minutesStr}:${secondsStr}`;
+  };
+
+  useEffect(() => {
+    const canvas = document.getElementById("yourCanvasElement");
+
+    if (canvas) {
+      const chartInstance = new Chart(canvas, {
+        type: "bar",
+        data: {
+          labels: ["January", "February", "March", "April", "May"],
+          datasets: [
+            {
+              label: "Total expected events",
+              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+              data: [88, 66, 33, 55, 99],
+            },
+            {
+              label: "Events done (occurred)",
+              backgroundColor: "rgba(255, 99, 132, 0.6)",
+              borderColor: "rgba(255, 99, 132, 1)",
+              borderWidth: 1,
+              data: [32, 45, 25, 18, 36],
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      return () => {
+        chartInstance.destroy();
+      };
+    }
+  }, []);
 
   return (
     <main className="dashboard">
@@ -196,16 +152,18 @@ function dashboard() {
               <div className="middle-content">
                 <div className="row">
                   <div className="booking-content">
-                    <img src={dbBg} />
+                    <img src={dbBg} alt="Booking" />
                     <div className="booking-content-data">
                       <div className="upper-content-data">
                         <div className="row">
                           <div className="text1">
                             <h5 className="h5-title">Number of Users</h5>
-                            <span className="booking-value">{numUsers || 'Loading ..'}</span>
+                            <span className="booking-value">
+                              {numUsers || "Loading .."}
+                            </span>
                           </div>
                           <div className="side-icon">
-                            <FaUmbrellaBeach style={{ color: "#a5a5a5" }} />
+                            <FaUsers style={{ color: "#a5a5a5" }} />
                           </div>
                         </div>
                       </div>
@@ -218,13 +176,15 @@ function dashboard() {
                     </div>
                   </div>
                   <div className="expense-content">
-                    <img src={dbBg} />
+                    <img src={dbBg} alt="Expense" />
                     <div className="expense-content-data">
                       <div className="upper-content-data">
                         <div className="row">
                           <div className="text1">
-                            <h5 className="h5-title">Total Tours</h5>
-                            <span className="expense-value">{numberOfTours || 'Loading ..'}</span>
+                            <h5 className="h5-title">Total Events</h5>
+                            <span className="expense-value">
+                              {numberOfEvents || "Loading .."}
+                            </span>
                           </div>
                           <div className="side-icon">
                             <FaUmbrellaBeach style={{ color: "#a5a5a5" }} />
@@ -233,9 +193,9 @@ function dashboard() {
                       </div>
                       <hr />
                       <div className="lower-content-data">
-                        <a href="/">
+                      <Link to="/event">
                           see more <BsArrowRightShort />
-                        </a>
+                      </Link>
                       </div>
                     </div>
                   </div>
@@ -244,68 +204,20 @@ function dashboard() {
                   <div className="payment-history">
                     <div className="container">
                       <div className="chart-container">
-                        <Bar data={data} options={options} />
+                        <canvas id="yourCanvasElement"></canvas>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="upcoming">
-                    <div className="upcoming-header">
-                      <h5 className="h5-title">Upcoming Trips</h5>
-                      <a href="/" className="see-more">
-                        see more <BsArrowRightShort />
-                      </a>
-                    </div>
-                    <div className="upcoming-box-wp">
-                      <div className="row">
-                        <div className="upcoming-box">
-                          <img src={switzerland} />
-                          <div className="up-text vrow">
-                            <h6 className="h6-title">
-                              Zermatt{" "}
-                              <span className="low-op"> /Switzerland </span>
-                            </h6>
-                            <div className="row">
-                              <span className="icon">
-                                <img src={userImg} />
-                                <FaStar style={{ margin: "0 5px" }} /> 4.9
-                              </span>
-                              <div className="next-arrow">
-                                <BsArrowRightShort />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="upcoming-box">
-                          <img src={zermat} />
-                          <div className="up-text vrow">
-                            <h6 className="h6-title">
-                              Zermatt{" "}
-                              <span className="low-op"> /Switzerland </span>
-                            </h6>
-                            <div className="row">
-                              <span className="icon">
-                                <img src={userImg} />
-                                <FaStar style={{ margin: "0 5px" }} /> 4.9
-                              </span>
-                              <div className="next-arrow">
-                                <BsArrowRightShort />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
+
               <div className="side-content">
                 <div className="side-content-row">
                   <div className="friend">
                     <div className="container">
                       <div className="sec-title">
-                        <h4 className="h4-title">Tours Available</h4>
+                        <h4 className="h4-title">Most Booked Event</h4>
                       </div>
                       <div className="friend-list">
                         <div className="friend-box">
@@ -315,11 +227,11 @@ function dashboard() {
                                 <img src={friend1} />
                               </div>
                               <div className="friend-id">
-                                <h6 className="h6-title">Alireza Bayat</h6>
-                                <p>France</p>
+                                <h6 className="h6-title">Junior Tech</h6>
+                                <p>Kigali kv - Rwanda</p>
                               </div>
                               <div className="chat-icon">
-                                <MdOutlineMarkUnreadChatAlt />
+                                <FaGem />
                               </div>
                             </div>
                           </a>
@@ -331,11 +243,11 @@ function dashboard() {
                                 <img src={friend1} />
                               </div>
                               <div className="friend-id">
-                                <h6 className="h6-title">Alireza Bayat</h6>
-                                <p>France</p>
+                                <h6 className="h6-title">Senior Tech</h6>
+                                <p>Kampala - Uganda</p>
                               </div>
                               <div className="chat-icon">
-                                <MdOutlineMarkUnreadChatAlt />
+                                <FaGem />
                               </div>
                             </div>
                           </a>
@@ -344,14 +256,14 @@ function dashboard() {
                           <a href="/dashboard">
                             <div className="row">
                               <div className="friend-img">
-                                <img src={friend2} />
+                                <img src={friend1} />
                               </div>
                               <div className="friend-id">
-                                <h6 className="h6-title">Ameria Brown</h6>
-                                <p>France</p>
+                                <h6 className="h6-title">Senior Tech</h6>
+                                <p>Kampala - Uganda</p>
                               </div>
                               <div className="chat-icon">
-                                <MdOutlineMarkUnreadChatAlt />
+                                <FaGem />
                               </div>
                             </div>
                           </a>
@@ -372,17 +284,7 @@ function dashboard() {
                       </div>
                       <div className="row ship-country">
                         <div>
-                          <h4 className="h4-title">PAR</h4>
-                          <p>France</p>
-                        </div>
-                        <div className="icons">
-                          <p>
-                            <RxBorderDashed /> <CiPlane /> <RxBorderDashed />
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="h4-title">LDN</h4>
-                          <p>England</p>
+                       <center> <b><p>Peace Building Event</p></b></center>  
                         </div>
                       </div>
                       <div className="row user-card">
@@ -401,7 +303,7 @@ function dashboard() {
                           <span>$400</span>
                         </span>
                       </div>
-                      <div className="btn dashboardbtn">go to cart</div>
+                      <div className="btn dashboardbtn">go to Event</div>
                     </div>
                   </div>
                 </div>
@@ -414,4 +316,4 @@ function dashboard() {
   );
 }
 
-export default dashboard;
+export default Dashboard;

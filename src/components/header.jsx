@@ -11,7 +11,6 @@ import {
   FaTimes,
   FaChevronDown,
 } from "react-icons/fa";
-import Navbar from "./navbar";
 import logoImage from "../assets/logo.png";
 import whiteLogo from "../assets/logo.png";
 import logoIconWhite from "../assets/logo-icon-white.svg";
