@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import loginBgImage from "../assets/highlight-image.jpg";
+import { Colors } from "chart.js";
 
 function Login() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function Login() {
     }
 
     axios
-      .post("https://holiday-api-zj3a.onrender.com/api/v1/auth/login", formData)
+      .post("http://localhost:100/api/v1/auth/login", formData)
       .then((response) => {
         if (response.status === 200) {
           // Retrieve the user role from the cookie
@@ -141,40 +142,8 @@ function Login() {
                     margin: "10px 0",
                   }}
                 >
-                  <div className="col-2">
-                    <hr />
-                  </div>
-                  <div className="col-8">
-                    <p>or login with</p>
-                  </div>
-                  <div className="col-2">
-                    <hr />
-                  </div>
                 </div>
-                <div
-                  className="col-12 login-buttons"
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <div className="col-5">
-                    <button className="google-login">
-                      <span className="icon">
-                        <FaGooglePlusSquare />
-                      </span>
-                      Google
-                    </button>
-                  </div>
-                  <div className="col-5">
-                    <button className="fb-login">
-                      <span className="icon">
-                        <FaFacebookF />
-                      </span>
-                      Facebook
-                    </button>
-                  </div>
-                </div>
+
               </div>
             </div>
 
@@ -190,8 +159,7 @@ function Login() {
                 <h2 className="h2-title">Welcome to our Login Page</h2>
                 <p>
                   Log in to your account to access all the amazing features and
-                  services we offer. If you don't have an account yet, you can{" "}
-                  <Link to="/signup">create one here</Link>.
+                  services we offer.
                 </p>
                 <Link to="/dashboard">
                   <h3>Return to home</h3>
