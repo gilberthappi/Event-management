@@ -1498,7 +1498,11 @@ ul.pagination {
   border-radius: 10px;
   box-shadow: var(--box-shadow);
   background: var(--background-light);
-  padding: 30px 20px;
+  padding: 4px 220px 0px 0px;
+  position: absolute;
+  top: 15%;
+  left: 55%;
+  
 }
 
 form.edit-tour-form .col-12 {
