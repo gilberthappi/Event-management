@@ -4,15 +4,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Notiflix from "notiflix";
 
-import {
-  FaUserAlt,
-  FaLock,
-  FaGooglePlusSquare,
-  FaFacebookF,
-} from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { FaUserAlt, FaLock } from "react-icons/fa";
 import loginBgImage from "../assets/highlight-image.jpg";
-import { Colors } from "chart.js";
 
 function Login() {
   const navigate = useNavigate();
@@ -46,23 +39,30 @@ function Login() {
     }
 
     axios
-      .post("http://localhost:100/api/v1/auth/login", formData)
-      .then((response) => {
-        if (response.status === 200) {
-          // Retrieve the user role from the cookie
-          const userRole = Cookies.get("userRole");
-          Notiflix.Notify.success("LOGIN SUCCESSFULLY");
+    .post("http://localhost:100/api/v1/auth/login", formData)
+    .then((response) => {
+      const { USER } = response.data; 
+      if (response.status === 200) {
+        const userRole = USER.role;
+        Notiflix.Notify.success("LOGIN SUCCESSFULLY");
+        if (userRole === "admin") {
           navigate("/dashboard");
         } else {
-          Notiflix.Notify.failure(
-            "Invalid email or password. Please try again."
-          );
+          navigate("/");
         }
-      })
-      .catch((error) => {
-        console.error("Login failed:", error);
-        Notiflix.Notify.failure("Invalid email or password. Please try again.");
-      });
+      } else {
+        Notiflix.Notify.failure(
+          "Invalid email or password. Please try again."
+        );
+      }
+    })
+    .catch((error) => {
+      console.error("Login failed:", error);
+      Notiflix.Notify.failure(
+        "Invalid email or password. Please try again."
+      );
+    });
+  
   };
 
   return (
@@ -141,9 +141,7 @@ function Login() {
                     flexDirection: "row",
                     margin: "10px 0",
                   }}
-                >
-                </div>
-
+                ></div>
               </div>
             </div>
 
