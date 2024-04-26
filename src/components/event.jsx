@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DashboardNav from "./dashboardNav";
+import DashboardNav from "./DashboardNav";
 import Notiflix from "notiflix";
-import { FaEye, FaRegTrashAlt, FaEdit, FaCalendarAlt, FaLocationDot } from "react-icons/fa";
-import EventDetailsModal from "./EventDetailsModal"; // Import EventDetailsModal component
+import { FaEye, FaRegTrashAlt, FaEdit, FaCalendarAlt } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import EventModal from "./EventDetailsModal";
 import "../style/dashboard.css";
 
-function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
+function Event() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -18,10 +19,8 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
   });
 
   const [events, setEvents] = useState([]);
-  const [editEventId, setEditEventId] = useState(null); // State to hold the ID of the event being edited
-
-  // State and functions for EventDetailsModal
-  const [showModal, setShowModal] = useState(false);
+  const [editEventId, setEditEventId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const handleChange = (e) => {
@@ -40,20 +39,20 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
       formDataToSend.append("description", formData.description);
       formDataToSend.append("date", formData.date);
       formDataToSend.append("location", formData.location);
-      formDataToSend.append("backdropImage", formData.backdropImage);
       formDataToSend.append("price", formData.price);
       formDataToSend.append("ticketsAvailable", formData.ticketsAvailable);
 
+      if (formData.backdropImage) {
+        formDataToSend.append("backdropImage", formData.backdropImage);
+      }
+
       if (editEventId) {
-        // If an event is being edited, update it
         await axios.put(`http://localhost:100/api/v1/event/update?fieldName=_id&value=${editEventId}`, formDataToSend);
         Notiflix.Notify.success("EVENT UPDATED SUCCESSFULLY");
       } else {
-        // If not, create a new event
         await axios.post("http://localhost:100/api/v1/event/addNew", formDataToSend);
         Notiflix.Notify.success("EVENT CREATED SUCCESSFULLY");
       }
-      // Clear the form after submission
       setFormData({
         title: "",
         description: "",
@@ -63,9 +62,7 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
         price: "",
         ticketsAvailable: "",
       });
-      // Reset editEventId after submission
       setEditEventId(null);
-      // Update the events list
       const response = await axios.get("http://localhost:100/api/v1/event/all");
       setEvents(response.data.data);
     } catch (error) {
@@ -77,16 +74,12 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:100/api/v1/event/all"
-        );
+        const response = await axios.get("http://localhost:100/api/v1/event/all");
         setEvents(response.data.data);
       } catch (err) {
         console.error("Error:", err);
       }
     };
-
-    // Fetch data on component mount
     fetchData();
   }, []);
 
@@ -94,7 +87,6 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
     try {
       await axios.delete(`http://localhost:100/api/v1/event/delete?fieldName=_id&value=${eventId}`);
       Notiflix.Notify.success("EVENT DELETED SUCCESSFULLY");
-      // After deletion, update the events list
       const response = await axios.get("http://localhost:100/api/v1/event/all");
       setEvents(response.data.data);
     } catch (error) {
@@ -104,9 +96,7 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
   };
 
   const handleEditEvent = (event) => {
-    // Set the state to the ID of the event being edited
     setEditEventId(event._id);
-    // Populate the form fields with the event's data
     setFormData({
       title: event.title,
       description: event.description,
@@ -115,13 +105,18 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
       price: event.price,
       ticketsAvailable: event.ticketsAvailable,
     });
-    // Scroll to the top of the page
     window.scrollTo(0, 0);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedEvent(null);
+  const openModal = async (event) => {
+    try {
+      const response = await axios.get(`http://localhost:100/api/v1/event/getById/${event._id}`);
+      setSelectedEvent(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching event details:", error);
+      alert("Error fetching event details. Please try again later.");
+    }
   };
 
   const buttonStyle = {
@@ -134,7 +129,7 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
     marginRight: "8px",
   };
 
-  const editButtonStyle = {
+  const EditButtonStyle = {
     backgroundColor: "#007bff",
     color: "white",
     padding: "8px 16px",
@@ -152,6 +147,7 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
     border: "none",
     cursor: "pointer",
   };
+
 
   return (
     <main className="dashboard">
@@ -277,9 +273,8 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
                   </div>
                 </form>
               </div>
-              
               {/* Events List */}
-              <div className="side-content1">
+              <div className="side-content">
                 <div className="side-content-row">
                   <div className="friend">
                     <div className="container">
@@ -290,32 +285,26 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
                         <ul>
                           {events.length > 0 ? (
                             events.map((event) => (
-                              <div className="friend-box" key={event._id}>
+                              <div className="friend-box1" key={event._id}>
                                 <li>
                                   <div>
                                     <img src={event.backdropImage} alt={event.title} style={{ width: "100%" }} />
                                   </div>
                                   <div>
-                                    <h3 style={{ fontSize: "24px", textAlign: "center", marginBottom: "8px" }}>{event.title}</h3>
+                                    <h3 style={{ fontSize: "24px", textAlign: "center",marginBottom: "8px" }}>{event.title}</h3>
                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                      <p><FaCalendarAlt />{event.date}</p>
-                                      <p> <FaLocationDot />{event.location}</p>
+                                      <p><FaCalendarAlt/>{event.date}</p>
+                                      <p> <FaLocationDot/>{event.location}</p>
                                     </div>
                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                       <p>Price: {event.price}$</p>
                                       <p>Ticket: {event.ticketsAvailable}</p>
                                     </div>
-                                    {/* Buttons */}
                                     <div>
-                                      {/* View button */}
-                                      <button style={buttonStyle} onClick={() => {
-                                        handleViewEvent(event); // Call handleViewEvent function with the event
-                                        setShowModal(true); // Open the modal
-                                        setSelectedEvent(event); // Set the selected event for the modal
-                                      }}><FaEye /> View</button>
-                                      {/* Edit button */}
-                                      <button style={editButtonStyle} onClick={() => handleEditEvent(event)}><FaEdit /> Edit</button>
-                                      {/* Delete button */}
+                                      <button style={buttonStyle} onClick={() => openModal(event)}>
+                                        <FaEye /> View
+                                      </button>
+                                      <button style={EditButtonStyle} onClick={() => handleEditEvent(event)}><FaEdit /> Edit</button>
                                       <button style={deleteButtonStyle} onClick={() => handleDeleteEvent(event._id)}><FaRegTrashAlt /> Delete</button>
                                     </div>
                                   </div>
@@ -335,9 +324,9 @@ function Event({ handleViewEvent }) { // Pass handleViewEvent function as prop
           </div>
         </div>
       </div>
-
-      {/* Render EventDetailsModal */}
-      <EventDetailsModal show={showModal} onHide={handleCloseModal} event={selectedEvent} />
+      {selectedEvent && (
+        <EventModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} event={selectedEvent} />
+      )}
     </main>
   );
 }
