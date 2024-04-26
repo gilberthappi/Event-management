@@ -1,30 +1,70 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import Modal from "react-modal";
+import { FaCalendarAlt } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 
-const EventDetailsModal = ({ show, onHide, event }) => {
+const EventModal = ({ isOpen, closeModal, event }) => {
   return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>{event.title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div>
-          <img src={event.backdropImage} alt={event.title} style={{ width: "100%" }} />
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      contentLabel="Event Details Modal"
+      style={{
+        overlay: {
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.5)", // semi-transparent background
+          zIndex: 9999, // ensure modal is displayed over everything
+        },
+        content: {
+          position: "absolute",
+          top: "50%", // adjust the vertical position
+          left: "50%", // adjust the horizontal position
+          transform: "translate(-50%, -50%)",
+          maxWidth: "700px",
+          width: "90%",
+          height: "95%", // increase the height
+          overflowY: "auto", // enable scrolling if content overflows
+          borderRadius: "10px",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)", // shadow effect
+          background: "white",
+          padding: "20px",
+        },
+      }}
+    >
+      <div>
+        <img
+          src={event.backdropImage}
+          alt={event.title}
+          style={{ width: "100%", height: "50%", marginBottom: "10px" }}
+        />
+        <h2>{event.title}</h2>
+        <p>{event.description}</p>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+          <p>
+            <FaCalendarAlt /> {event.date}
+          </p>
+          <p>
+            <FaLocationDot /> {event.location}
+          </p>
         </div>
-        <p><strong>Description:</strong> {event.description}</p>
-        <p><strong>Date:</strong> {event.date}</p>
-        <p><strong>Location:</strong> {event.location}</p>
-        <p><strong>Price:</strong> {event.price}</p>
-        <p><strong>Ticket Availability:</strong> {event.ticketsAvailable}</p>
-        {/* Add more event details here as needed */}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
-      </Modal.Footer>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <p>Price: {event.price}$</p>
+          <p>Ticket: {event.ticketsAvailable}</p>
+        </div>
+      </div>
+      <div className="col-12">
+        <div className="edit-tour-btn">
+          <button className="btn confirm-btn" onClick={closeModal}>
+            Close
+          </button>
+        </div>
+      </div>
     </Modal>
   );
 };
 
-export default EventDetailsModal;
+export default EventModal;
