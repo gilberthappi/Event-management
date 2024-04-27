@@ -67,7 +67,7 @@ function Home() {
 
   // Fetch events from API
   useEffect(() => {
-    axios.get("http://localhost:100/api/v1/event/all")
+    axios.get("https://event-management-api-svlr.onrender.com/api/v1/event/all")
       .then(response => {
         setEvents(response.data);
       })
@@ -108,7 +108,7 @@ function Home() {
   
     // Send booking request to backend
     axios
-      .post("http://localhost:100/api/v1/booking/book", bookingData)
+      .post("https://event-management-api-svlr.onrender.com/api/v1/booking/book", bookingData)
       .then((response) => {
         Notiflix.Notify.success("Event booked successfully.");
         console.log("Booking successful:", response.data);

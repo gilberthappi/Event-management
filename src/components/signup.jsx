@@ -53,7 +53,7 @@ function Signup() {
 
     axios
       .post(
-        "http://localhost:100/api/v1/auth/signup",
+        "https://event-management-api-svlr.onrender.com/api/v1/auth/signup",
         formData
       )
       .then((response) => {

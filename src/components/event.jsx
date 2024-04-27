@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DashboardNav from "./DashboardNav";
+import DashboardNav from "./dashboardNav";
 import Notiflix from "notiflix";
 import { FaEye, FaRegTrashAlt, FaEdit, FaCalendarAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
@@ -47,10 +47,10 @@ function Event() {
       }
 
       if (editEventId) {
-        await axios.put(`http://localhost:100/api/v1/event/update?fieldName=_id&value=${editEventId}`, formDataToSend);
+        await axios.put(`https://event-management-api-svlr.onrender.com/api/v1/event/update?fieldName=_id&value=${editEventId}`, formDataToSend);
         Notiflix.Notify.success("EVENT UPDATED SUCCESSFULLY");
       } else {
-        await axios.post("http://localhost:100/api/v1/event/addNew", formDataToSend);
+        await axios.post("https://event-management-api-svlr.onrender.com/api/v1/event/addNew", formDataToSend);
         Notiflix.Notify.success("EVENT CREATED SUCCESSFULLY");
       }
       setFormData({
@@ -63,7 +63,7 @@ function Event() {
         ticketsAvailable: "",
       });
       setEditEventId(null);
-      const response = await axios.get("http://localhost:100/api/v1/event/all");
+      const response = await axios.get("https://event-management-api-svlr.onrender.com/api/v1/event/all");
       setEvents(response.data.data);
     } catch (error) {
       console.error("Error:", error);
@@ -74,7 +74,7 @@ function Event() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:100/api/v1/event/all");
+        const response = await axios.get("https://event-management-api-svlr.onrender.com/api/v1/event/all");
         setEvents(response.data.data);
       } catch (err) {
         console.error("Error:", err);
@@ -85,9 +85,9 @@ function Event() {
 
   const handleDeleteEvent = async (eventId) => {
     try {
-      await axios.delete(`http://localhost:100/api/v1/event/delete?fieldName=_id&value=${eventId}`);
+      await axios.delete(`https://event-management-api-svlr.onrender.com/api/v1/event/delete?fieldName=_id&value=${eventId}`);
       Notiflix.Notify.success("EVENT DELETED SUCCESSFULLY");
-      const response = await axios.get("http://localhost:100/api/v1/event/all");
+      const response = await axios.get("https://event-management-api-svlr.onrender.com/api/v1/event/all");
       setEvents(response.data.data);
     } catch (error) {
       console.error("Error:", error);
@@ -110,7 +110,7 @@ function Event() {
 
   const openModal = async (event) => {
     try {
-      const response = await axios.get(`http://localhost:100/api/v1/event/getById/${event._id}`);
+      const response = await axios.get(`https://event-management-api-svlr.onrender.com/api/v1/event/getById/${event._id}`);
       setSelectedEvent(response.data);
       setIsModalOpen(true);
     } catch (error) {

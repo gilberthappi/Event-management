@@ -30,7 +30,7 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:100/api/v1/auth/users")
+      .get("https://event-management-api-svlr.onrender.com/api/v1/auth/users")
       .then((response) => {
         setNumUsers(response.data.length);
       })
@@ -39,7 +39,7 @@ function Dashboard() {
       });
 
     axios
-      .get("http://localhost:100/api/v1/event/all")
+      .get("https://event-management-api-svlr.onrender.com/api/v1/event/all")
       .then((response) => {
         setNumberOfEvents(response.data.length);
       })

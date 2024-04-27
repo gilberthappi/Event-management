@@ -34,7 +34,7 @@ function Login() {
 
   const handleLogin = () => {
     axios
-      .post("http://localhost:100/api/v1/auth/login", formData)
+      .post("https://event-management-api-svlr.onrender.com/api/v1/auth/login", formData)
       .then((response) => {
         const { access_token, USER } = response.data; // Assuming the token is returned in the response
         if (access_token) {
