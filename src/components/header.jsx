@@ -12,7 +12,7 @@ import profilepng from "../assets/spongeBob.png";
 import { useAuth } from "./AuthContext";
 
 function Header() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, userToken } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -123,10 +123,8 @@ function Header() {
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                     />
                     <div style={dropdownStyle}>
-                    <button> <a href="/dashboard" >Dashboard</a></button>
-                      <button onClick={logout}>
-                        Logout
-                      </button>
+                      <button><a href="/dashboard">Dashboard</a></button>
+                      <button onClick={logout}>Logout</button>
                     </div>
                   </div>
                 ) : (
