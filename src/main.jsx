@@ -15,7 +15,7 @@ import "./style/styles.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-    <AuthProvider> {/* Wrap the application with AuthProvider */}
+    <AuthProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
