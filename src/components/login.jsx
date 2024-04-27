@@ -3,12 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Notiflix from "notiflix";
+import { useAuth } from "./AuthContext";
 
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import loginBgImage from "../assets/highlight-image.jpg";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // Access login function from useAuth hook
 
   const [formData, setFormData] = useState({
     email: "",
@@ -39,32 +41,27 @@ function Login() {
     }
 
     axios
-    .post("http://localhost:100/api/v1/auth/login", formData)
-    .then((response) => {
-      const { USER } = response.data; 
-      if (response.status === 200) {
-        const userRole = USER.role;
-        Notiflix.Notify.success("LOGIN SUCCESSFULLY");
-        if (userRole === "admin") {
-          navigate("/dashboard");
+      .post("http://localhost:100/api/v1/auth/login", formData)
+      .then((response) => {
+        const { USER } = response.data;
+        if (response.status === 200) {
+          const userRole = USER.role;
+          Notiflix.Notify.success("LOGIN SUCCESSFULLY");
+          login(); // Call the login function from useAuth hook
+          if (userRole === "admin") {
+            navigate("/dashboard");
+          } else {
+            navigate("/");
+          }
         } else {
-          navigate("/");
+          Notiflix.Notify.failure("Invalid email or password. Please try again.");
         }
-      } else {
-        Notiflix.Notify.failure(
-          "Invalid email or password. Please try again."
-        );
-      }
-    })
-    .catch((error) => {
-      console.error("Login failed:", error);
-      Notiflix.Notify.failure(
-        "Invalid email or password. Please try again."
-      );
-    });
-  
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        Notiflix.Notify.failure("Invalid email or password. Please try again.");
+      });
   };
-
   return (
     <main className="login-page">
       <div className="login">
