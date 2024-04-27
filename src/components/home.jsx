@@ -6,10 +6,10 @@ import abtSmallImage from "../assets/aboutEventUs1.jpeg";
 import whiteMap from "../assets/white-map.png";
 import tourBoxImage1 from "../assets/tour-box-image1.jpg";
 import { FaLocationDot } from "react-icons/fa6";
-
+import { useAuth } from "./AuthContext";
+import Notiflix from "notiflix";
 
 import {
-  FaClock,
   FaUserFriends,
   FaCalendarAlt
 } from "react-icons/fa";
@@ -76,13 +76,55 @@ function Home() {
       });
   }, []);
   
-  console.log("Events:", events); // Add this line to check the value of events
   
   const tourStyle = {
     backgroundImage: `url(${whiteMap})`,
     backgroundSize: "cover",
     backgroundPosition: "center center",
   };
+
+  const { userToken } = useAuth();
+
+  const [numberOfTickets, setNumberOfTickets] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [bookingError, setBookingError] = useState(null);
+
+  const handleBooking = (eventID, userToken) => {
+    console.log("User token:", userToken);
+    if (!userToken || !userToken.id) {
+      console.error("User token or userID is undefined.");
+      return;
+    }
+
+    // Prepare data for booking
+    const bookingData = {
+      eventID: eventID,
+      UserID: userToken.id,
+      numberOfTickets: numberOfTickets,
+      paymentMethod: paymentMethod,
+    };
+  
+    console.log("UserID:", userToken.id);
+  
+    // Send booking request to backend
+    axios
+      .post("http://localhost:100/api/v1/booking/book", bookingData)
+      .then((response) => {
+        Notiflix.Notify.success("Event booked successfully.");
+        console.log("Booking successful:", response.data);
+        // Display success message to the user
+      })
+      .catch((error) => {
+        Notiflix.Notify.failure("Failed to book the event. Please try again.");
+        console.error("Booking failed:", error);
+        setBookingError("Failed to book the event. Please try again."); // Set booking error state
+      });
+  };
+  
+  
+  
+
+
   return (
     <main className="home-content">
       <section className="home-banner">
@@ -217,13 +259,14 @@ function Home() {
                           <h3 className="h3-title">${event.price}</h3>
                         </div>
                         <div className="book-now-button">
-                          <a href="" className="btn">Book Now</a>
+                        <button onClick={() => handleBooking(event._id, userToken)}>Book Now</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
+              {bookingError && <p>{bookingError}</p>}
             </div>
 
           </div>
