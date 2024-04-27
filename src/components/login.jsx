@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
 import Notiflix from "notiflix";
 import { useAuth } from "./AuthContext";
 
@@ -15,7 +14,7 @@ function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rememberMe: Cookies.get("rememberMe") === "true",
+    rememberMe: false,
   });
 
   const handleChange = (e) => {
@@ -34,25 +33,15 @@ function Login() {
   };
 
   const handleLogin = () => {
-    if (formData.rememberMe) {
-      Cookies.set("rememberMe", formData.rememberMe, { expires: 365 });
-    } else {
-      Cookies.remove("rememberMe");
-    }
-
     axios
       .post("http://localhost:100/api/v1/auth/login", formData)
       .then((response) => {
-        const { USER } = response.data;
-        if (response.status === 200) {
-          const userRole = USER.role;
+        const { access_token, USER } = response.data; // Assuming the token is returned in the response
+        if (access_token) {
           Notiflix.Notify.success("LOGIN SUCCESSFULLY");
-          login(); // Call the login function from useAuth hook
-          if (userRole === "admin") {
-            navigate("/dashboard");
-          } else {
-            navigate("/");
-          }
+          login(access_token); // Call the login function from useAuth hook with the token
+          console.log("User token:", access_token); // Log the token to the console
+          navigate("/");
         } else {
           Notiflix.Notify.failure("Invalid email or password. Please try again.");
         }
@@ -62,6 +51,8 @@ function Login() {
         Notiflix.Notify.failure("Invalid email or password. Please try again.");
       });
   };
+
+  
   return (
     <main className="login-page">
       <div className="login">
