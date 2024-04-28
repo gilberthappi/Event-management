@@ -91,7 +91,7 @@ _To get a local copy up and running follow these simple steps._
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/gilberthappi/Event-management-api.git
+   git clone https://github.com/gilberthappi/Event-management.git
    ```
 2. Goto project directory
    ```sh
@@ -145,7 +145,7 @@ _To get a local copy up and running follow these simple steps._
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/gilberthappi/Event-management/issues/).
+Feel free to check the [issues page](https://github.com/gilberthappi/Event-management/issues/1).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
