@@ -80,6 +80,12 @@
 
 (((Coming soon!!)))
 
+- [ ] **Swagger Documentation from BackEnd**
+
+   ```sh
+   https://event-management-api-svlr.onrender.com/api-docs/#/
+   ```
+
 <!-- GETTING STARTED -->
 
 ## 💻 Getting Started <a name="getting-started"></a>
