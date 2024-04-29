@@ -19,7 +19,7 @@ import {
 } from "react-icons/md";
 
 import dbBg from "../assets/dashboard-div-bg.png";
-import friend1 from "../assets/friend1.jpeg";
+import friend1 from "../assets/event1.jpeg";
 
 
 import "../style/dashboard.css";
