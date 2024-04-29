@@ -28,12 +28,12 @@ function DashboardNav() {
               </Link>
             </div>
             <div className="dashboard-navlink">
-              <Link to="/dashboard/">
+              <Link to="/bookings">
                 <FaCalendarCheck /> <span>bookings</span> <FaAngleRight />
               </Link>
             </div>
             <div className="dashboard-navlink">
-              <Link to="/dashboard/"> 
+              <Link to="/users"> 
                 <FaUsers /> <span>users</span> <FaAngleRight />
               </Link>
             </div>
