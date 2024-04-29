@@ -20,6 +20,72 @@ import bannerSlide1 from "../assets/event1.jpeg";
 import bannerSlide2 from "../assets/event3.png";
 import bannerSlide3 from "../assets/event2.jpeg";
 
+// CSS Styles for Popup Form
+const popupContainerStyle = {
+  position: "fixed",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  background: "#fff",
+  padding: "20px",
+  borderRadius: "8px",
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+};
+
+const popupContentStyle = {
+  textAlign: "center",
+};
+
+const closeButtonStyle = {
+  position: "absolute",
+  top: "10px",
+  right: "10px",
+  cursor: "pointer",
+  background: "var(--yellow-color)",
+  color: "#fff",
+  border: "none",
+  // padding: "10px 20px",
+  padding:"0px 5px 0px 5px",
+  borderRadius: "5px",
+};
+
+const inputGroupStyle = {
+  marginBottom: "10px",
+  display: "flex",
+  flexDirection: "row",
+};
+
+const inputStyle = {
+  width: "50%",
+  height: "25px",
+  padding: "8px",
+  boxSizing: "border-box",
+  // marginBottom: "10px",
+  marginLeft: "10px",
+  // marginTop:"10px"
+};
+
+const bookButtonStyle = {
+  background: "var(--yellow-color)",
+  color: "#fff",
+  border: "none",
+  padding: "10px 20px",
+  borderRadius: "5px",
+  cursor: "pointer",
+  textTransform: "uppercase",
+};
+
+const errorMessageStyle = {
+  color: "red",
+};
+
+const tourStyle = {
+  backgroundImage: `url(${whiteMap})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center center",
+};
+
+
 function Home() {
   const slides = [
     {
@@ -45,29 +111,30 @@ function Home() {
     },
   ];
 
-  // State for current slide
   const [currentSlide, setCurrentSlide] = useState(0);
   const [events, setEvents] = useState([]);
+  const { userToken } = useAuth();
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [numberOfTickets, setNumberOfTickets] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [bookingError, setBookingError] = useState(null);
 
-  // Function to move to the next slide
   const nextSlide = () => {
     setCurrentSlide((currentSlide + 1) % slides.length);
   };
 
-  // Function to move to the previous slide
   const prevSlide = () => {
     setCurrentSlide((currentSlide - 1 + slides.length) % slides.length);
   };
 
-  // Auto slide transition
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
     return () => clearInterval(interval);
   }, [currentSlide]);
 
-  // Fetch events from API
   useEffect(() => {
-    axios.get("https://event-management-api-svlr.onrender.com/api/v1/event/all")
+    axios.get("http://localhost:100/api/v1/event/all")
       .then(response => {
         setEvents(response.data);
       })
@@ -75,55 +142,29 @@ function Home() {
         console.error("Error fetching events:", error);
       });
   }, []);
-  
-  
-  const tourStyle = {
-    backgroundImage: `url(${whiteMap})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center center",
-  };
 
-  const { userToken } = useAuth();
 
-  const [numberOfTickets, setNumberOfTickets] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [bookingError, setBookingError] = useState(null);
-
-  const handleBooking = (eventID, userToken) => {
-    console.log("User token:", userToken);
-    if (!userToken || !userToken.id) {
-      console.error("User token or userID is undefined.");
-      return;
-    }
-
-    // Prepare data for booking
+  const handleBooking = () => {
     const bookingData = {
-      eventID: eventID,
+      eventID: selectedEvent._id,
       UserID: userToken.id,
       numberOfTickets: numberOfTickets,
       paymentMethod: paymentMethod,
     };
-  
-    console.log("UserID:", userToken.id);
-  
-    // Send booking request to backend
+
     axios
-      .post("https://event-management-api-svlr.onrender.com/api/v1/booking/book", bookingData)
+      .post("http://localhost:100/api/v1/booking/book", bookingData)
       .then((response) => {
         Notiflix.Notify.success("Event booked successfully.");
+        setPopupVisible(false);
         console.log("Booking successful:", response.data);
-        // Display success message to the user
       })
       .catch((error) => {
         Notiflix.Notify.failure("Failed to book the event. Please try again.");
         console.error("Booking failed:", error);
-        setBookingError("Failed to book the event. Please try again."); // Set booking error state
+        setBookingError("Failed to book the event. Please try again.");
       });
   };
-  
-  
-  
-
 
   return (
     <main className="home-content">
@@ -159,12 +200,12 @@ function Home() {
                 <div className="abt-img">
                   <div className="about-image-box big-img">
                     <div className="about-image back-image">
-                      <img src={abtBigImage} />
+                      <img src={abtBigImage} alt="Big Image" />
                     </div>
                   </div>
                   <div className="about-image-box small-img">
                     <div className="about-image back-image">
-                      <img src={abtSmallImage} />
+                      <img src={abtSmallImage} alt="Small Image" />
                     </div>
                   </div>
                 </div>
@@ -180,7 +221,7 @@ function Home() {
                 </h2>
                 <div className="about-content-text">
                   <p>
-                  As Event Planner, we excel in event planning, offering comprehensive services to make your special occasions extraordinary. From weddings and corporate functions to private parties and community events, we handle every detail with precision and care. Our team of experienced professionals is dedicated to bringing your vision to life, ensuring seamless execution and unforgettable experiences. Let Event Planner be your trusted partner in creating moments that will be cherished for a lifetime.
+                    As Event Planner, we excel in event planning, offering comprehensive services to make your special occasions extraordinary. From weddings and corporate functions to private parties and community events, we handle every detail with precision and care. Our team of experienced professionals is dedicated to bringing your vision to life, ensuring seamless execution and unforgettable experiences. Let Event Planner be your trusted partner in creating moments that will be cherished for a lifetime.
                   </p>
                 </div>
                 <a href="/about" className="btn">
@@ -198,18 +239,17 @@ function Home() {
               <div className="col-6">
                 <div className="sec-title wow">
                   <div className="line-title">
-                    <h4 className="h4-title">Upcomming Event</h4>
+                    <h4 className="h4-title">Upcoming Event</h4>
                   </div>
                   <h2 className="h2-title">
-                    Trending, <span>Best Selling Tickets</span> And High
-                    Discount
+                    Trending, <span>Best Selling Tickets</span> And High Discount
                   </h2>
                 </div>
               </div>
             </div>
 
             <div className="row tour-slider wow">
-            {events.data && events.data.map(event => (
+              {events.data && events.data.map(event => (
                 <div className="col-4" key={event._id}>
                   <div className="tour-box">
                     <div
@@ -223,7 +263,7 @@ function Home() {
                         </div>
                       </div>
                       <div className="tour-box-title">
-                        <h4  className="h4-title" > <i><FaLocationDot/></i>{event.location}</h4>
+                        <h4 className="h4-title"><i><FaLocationDot/></i>{event.location}</h4>
                       </div>
                       <div className="tour-box-description">
                         <p>{event.description}</p>
@@ -247,7 +287,7 @@ function Home() {
                                 <i><FaUserFriends /></i>
                               </div>
                               <div className="tour-info-content">
-                                <h5 className="h6-title">Tickets Available</h5>
+                                <h5 className="h6-title">Tickets</h5>
                                 <p>{event.ticketsAvailable}</p>
                               </div>
                             </div>
@@ -258,9 +298,12 @@ function Home() {
                         <div className="tour-price">
                           <h3 className="h3-title">${event.price}</h3>
                         </div>
-                        <div className="book-now-button">
-                        <button onClick={() => handleBooking(event._id, userToken)}>Book Now</button>
-                        </div>
+
+                          <button style={bookButtonStyle} className="book-button" onClick={() => {
+                            setSelectedEvent(event);
+                            setPopupVisible(true);
+                          }}>Book Now</button>
+
                       </div>
                     </div>
                   </div>
@@ -268,11 +311,29 @@ function Home() {
               ))}
               {bookingError && <p>{bookingError}</p>}
             </div>
-
           </div>
         </div>
       </section>
-      
+      {popupVisible && selectedEvent && (
+        <div style={popupContainerStyle} className="popup-container">
+          <div style={popupContentStyle} className="popup-content">
+            <span style={closeButtonStyle} className="close" onClick={() => setPopupVisible(false)}>&times;</span>
+            <h3>Book Event</h3>
+            <h2 className="h4-title" style={{ textTransform: "uppercase"}} ><i>⭐️-{selectedEvent.title}-⭐️</i></h2>
+            <div style={inputGroupStyle} className="input-group">
+              <label htmlFor="numberOfTickets">Number of Tickets:</label>
+              <input style={inputStyle} type="number" id="numberOfTickets" value={numberOfTickets} onChange={(e) => setNumberOfTickets(e.target.value)} />
+            </div>
+            <div style={inputGroupStyle} className="input-group">
+              <label htmlFor="paymentMethod">$ Payment Method:</label>
+               <input style={inputStyle} type="text" id="paymentMethod" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} />
+
+            </div>
+            <button style={bookButtonStyle} className="book-button" onClick={handleBooking}>Book</button>
+            {bookingError && <p style={errorMessageStyle} className="error-message">{bookingError}</p>}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
