@@ -6,7 +6,7 @@ import abtSmallImage from "../assets/aboutEventUs1.jpeg";
 import whiteMap from "../assets/white-map.png";
 import tourBoxImage1 from "../assets/tour-box-image1.jpg";
 import { FaLocationDot } from "react-icons/fa6";
-import { useAuth } from "./AuthContext";
+import { useAuth} from "./AuthContext";
 import Notiflix from "notiflix";
 
 import {
@@ -113,13 +113,14 @@ function Home() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [events, setEvents] = useState([]);
-  const { userToken } = useAuth();
+  const { userToken, userId } = useAuth();
   const [popupVisible, setPopupVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [numberOfTickets, setNumberOfTickets] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [bookingError, setBookingError] = useState(null);
-
+  // console.log("user token:",userToken );
+  // console.log("user id:", userId);
   const nextSlide = () => {
     setCurrentSlide((currentSlide + 1) % slides.length);
   };
@@ -147,7 +148,7 @@ function Home() {
   const handleBooking = () => {
     const bookingData = {
       eventID: selectedEvent._id,
-      UserID: userToken.id,
+      UserID: userId,
       numberOfTickets: numberOfTickets,
       paymentMethod: paymentMethod,
     };
@@ -160,7 +161,7 @@ function Home() {
         console.log("Booking successful:", response.data);
       })
       .catch((error) => {
-        Notiflix.Notify.failure("Failed to book the event. Please try again.");
+        Notiflix.Notify.failure("Failed. Please Login and try again.");
         console.error("Booking failed:", error);
         setBookingError("Failed to book the event. Please try again.");
       });
