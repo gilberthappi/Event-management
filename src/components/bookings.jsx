@@ -37,7 +37,7 @@ function Book() {
       formDataToSend.append("paymentMethod", formData.paymentMethod);
   
       // Update the booking using PUT request
-      await axios.put(`http://localhost:100/api/v1/booking/${editBookId}`, formDataToSend);
+      await axios.put(`https://event-management-api-svlr.onrender.com/api/v1/booking/${editBookId}`, formDataToSend);
       Notiflix.Notify.success("BOOKING UPDATED SUCCESSFULLY");
   
       // Update the bookings state with the updated booking details
@@ -68,7 +68,7 @@ function Book() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:100/api/v1/booking/all");
+        const response = await axios.get("https://event-management-api-svlr.onrender.com/api/v1/booking/all");
         setBookings(response.data); // Assuming the response directly contains the array of bookings
         setLoading(false); // Set loading to false after successful data retrieval
       } catch (error) {
@@ -84,7 +84,7 @@ function Book() {
 
   const handleDeleteBook = async (bookId) => {
     try {
-      await axios.delete(`http://localhost:100/api/v1/booking/${bookId}`);
+      await axios.delete(`https://event-management-api-svlr.onrender.com/api/v1/booking/${bookId}`);
       Notiflix.Notify.success("BOOK DELETED SUCCESSFULLY");
       // Update the bookings state by removing the deleted booking
       setBookings(prevBookings => prevBookings.filter(book => book._id !== bookId));
@@ -105,7 +105,7 @@ function Book() {
 
   const openModal = async (book) => {
     try {
-      const response = await axios.get(`http://localhost:100/api/v1/booking/${book._id}`);
+      const response = await axios.get(`https://event-management-api-svlr.onrender.com/api/v1/booking/${book._id}`);
       setSelectedBook(response.data);
       setIsModalOpen(true);
     } catch (error) {
@@ -118,7 +118,7 @@ function Book() {
 const handleCancelBooking = async (bookId) => {
     try {
       // Send a PUT request to update the booking status to "canceled"
-      await axios.put(`http://localhost:100/api/v1/booking/${bookId}`, { Status: "canceled" });
+      await axios.put(`https://event-management-api-svlr.onrender.com/api/v1/booking/${bookId}`, { Status: "canceled" });
       Notiflix.Notify.success("BOOKING CANCELED SUCCESSFULLY");
   
       // Update the bookings state with the updated booking status
