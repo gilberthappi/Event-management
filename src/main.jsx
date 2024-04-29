@@ -8,6 +8,7 @@ import Login from "./components/login";
 import Signup from "./components/signup";
 import Dashboard from "./components/dashboard";
 import Event from "./components/event";
+import Book from "./components/bookings"
 import { AuthProvider } from "./components/AuthContext";
 
 import "./style/styles.css";
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/event" element={<Event />} />
+          <Route path="/bookings" element={<Book />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
