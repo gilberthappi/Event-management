@@ -69,7 +69,7 @@
 >Manage All User or View attende 
 
 - [ ] **User Dashboard**
->Manage His/Her Bookings 
+>Manage His/Her Bookings ✓
 >User select number of ticket ✓
 >Allow User to Cancel Booking ✓
 
