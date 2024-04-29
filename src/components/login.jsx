@@ -1,3 +1,4 @@
+// Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -34,13 +35,15 @@ function Login() {
 
   const handleLogin = () => {
     axios
-      .post("https://event-management-api-svlr.onrender.com/api/v1/auth/login", formData)
+      .post("http://localhost:100/api/v1/auth/login", formData)
       .then((response) => {
-        const { access_token, USER } = response.data; // Assuming the token is returned in the response
-        if (access_token) {
+        const { access_token, USER } = response.data; // Extract user data from the response
+        if (access_token && USER) {
+          const userId = USER.id; // Extract user ID from the USER object
           Notiflix.Notify.success("LOGIN SUCCESSFULLY");
-          login(access_token); // Call the login function from useAuth hook with the token
-          console.log("User token:", access_token); // Log the token to the console
+          login(access_token, userId); // Call the login function from useAuth hook with the token and user ID
+          // console.log("User token:", access_token); // Log the token to the console
+          // console.log("User ID:", userId); // Log the user ID to the console
           navigate("/");
         } else {
           Notiflix.Notify.failure("Invalid email or password. Please try again.");
@@ -51,6 +54,7 @@ function Login() {
         Notiflix.Notify.failure("Invalid email or password. Please try again.");
       });
   };
+  
 
   
   return (
