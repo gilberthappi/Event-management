@@ -490,6 +490,12 @@ ul {
   width: 30.77777%;
 }
 
+.side-content1 {
+  width: 50.77777%;
+  margin-bottom: 10px;
+}
+
+
 .side-content-row {
   display: flex;
   flex-direction: column;
@@ -1494,15 +1500,15 @@ ul.pagination {
 
 .edit-tour {
   margin: auto;
-  width: 650px;
+  width: 600px;
   max-width: 100%;
   border-radius: 10px;
   box-shadow: var(--box-shadow);
   background: var(--background-light);
-  padding: 4px 220px 0px 0px;
+  padding: 4px 220px 0px 50px;
   position: absolute;
   top: 15%;
-  left: 55%;
+  left: 61%;
   
 }
 
