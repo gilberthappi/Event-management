@@ -130,7 +130,7 @@ function Dashboard() {
             <div className="row">
               <div className="user-greeting">
                 <h3 className="h3-title">
-                  Hello, <span className="username">Hossein</span>
+                  Hello, <span className="username">Happi</span>
                 </h3>
               </div>
               <div className="row right-header-nav">
