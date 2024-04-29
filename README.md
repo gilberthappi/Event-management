@@ -58,19 +58,24 @@
 
 - [ ] **Booking management**
 >Create Booking ✓
->View Bookings 
->Edit Booking 
->Cancel Booking 
->Delete Booking
+>View Bookings ✓
+>Edit Booking ✓
+>Cancel Booking ✓
+>Delete Booking ✓
 
 - [ ] **Admin Dashboard**
 >Manage All Event ✓
->Manage All Booking
->Manage All User
+>Manage All Booking ✓
+>Manage All User or View attende 
 
 - [ ] **User Dashboard**
->Manage His/Her Bookings
+>Manage His/Her Bookings 
+>User select number of ticket ✓
+>Allow User to Cancel Booking ✓
 
+- [ ] **Error Handling and Form Validation**
+>Error handling ✓
+>Form Validation ✓
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
