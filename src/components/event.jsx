@@ -274,7 +274,7 @@ function Event() {
                 </form>
               </div>
               {/* Events List */}
-              <div className="side-content">
+              <div className="side-content1">
                 <div className="side-content-row">
                   <div className="friend">
                     <div className="container">
