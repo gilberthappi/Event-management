@@ -19,7 +19,7 @@ function Signup() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullname: "",
+    fullNames: "",
     email: "",
     phone: "",
     password: "",
@@ -42,7 +42,7 @@ function Signup() {
     e.preventDefault();
 
     if (
-      !formData.fullname ||
+      !formData.fullNames ||
       !formData.email ||
       !formData.phone ||
       !formData.password
@@ -115,8 +115,8 @@ function Signup() {
                   type="text"
                   placeholder="Full Name"
                   className="form-input"
-                  name="fullname"
-                  value={formData.fullname}
+                  name="fullNames"
+                  value={formData.fullNames}
                   onChange={handleChange}
                   required
                 />

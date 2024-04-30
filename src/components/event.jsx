@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DashboardNav from "./dashboardNav";
 import Notiflix from "notiflix";
-import { FaEye, FaRegTrashAlt, FaEdit, FaCalendarAlt } from "react-icons/fa";
+import { FaEye, FaRegTrashAlt, FaEdit, FaCalendarAlt, FaTimes } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import EventModal from "./EventDetailsModal";
 import "../style/dashboard.css";
@@ -119,6 +119,31 @@ function Event() {
     }
   };
 
+// Function to handle the cancelation of the Event
+const handleCancelEvent = async (eventId) => {
+  try {
+    // Send a PUT request to update the Event status to "canceled"
+    await axios.put(`https://event-management-api-svlr.onrender.com/api/v1/event/update?fieldName=_id&value=${eventId}`, { Status: "canceled" });
+    Notiflix.Notify.success("EVENT CANCELED SUCCESSFULLY");
+
+    // Update the Events state with the updated Event status
+    const updatedEvents = events.map(event => {
+      if (event._id === eventId) {
+        return {
+          ...event,
+          Status: "canceled"
+        };
+      }
+      return event;
+    });
+    setEvents(updatedEvents);
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error canceling Event. Please try again later.");
+  }
+};
+
+
   const buttonStyle = {
     backgroundColor: "#007bff",
     color: "white",
@@ -126,7 +151,7 @@ function Event() {
     borderRadius: "4px",
     border: "none",
     cursor: "pointer",
-    marginRight: "8px",
+    marginRight: "50px",
   };
 
   const EditButtonStyle = {
@@ -136,8 +161,19 @@ function Event() {
     borderRadius: "4px",
     border: "none",
     cursor: "pointer",
-    marginRight: "8px",
+    marginRight: "40px",
   };
+
+  const cancelButtonStyle = {
+    backgroundColor: "#dc3545",
+    color: "white",
+    padding: "8px 16px",
+    borderRadius: "4px",
+    border: "none",
+    cursor: "pointer",
+    marginRight: "30px",
+  };
+
 
   const deleteButtonStyle = {
     backgroundColor: "#dc3545",
@@ -147,7 +183,6 @@ function Event() {
     border: "none",
     cursor: "pointer",
   };
-
 
   return (
     <main className="dashboard">
@@ -259,7 +294,6 @@ function Event() {
                       type="file"
                       accept="image/*"
                       onChange={handleFileChange}
-                      required
                       style={{ width: "100%", padding: "8px", fontSize: "15px", boxSizing: "border-box" }}
                     />
                   </div>
@@ -285,7 +319,7 @@ function Event() {
                         <ul>
                           {events.length > 0 ? (
                             events.map((event) => (
-                              <div className="friend-box1" key={event._id}>
+                              <div className="friend-box" key={event._id}>
                                 <li>
                                   <div>
                                     <img src={event.backdropImage} alt={event.title} style={{ width: "100%" }} />
@@ -301,10 +335,9 @@ function Event() {
                                       <p>Ticket: {event.ticketsAvailable}</p>
                                     </div>
                                     <div>
-                                      <button style={buttonStyle} onClick={() => openModal(event)}>
-                                        <FaEye /> View
-                                      </button>
+                                      <button style={buttonStyle} onClick={() => openModal(event)}><FaEye /> View</button>
                                       <button style={EditButtonStyle} onClick={() => handleEditEvent(event)}><FaEdit /> Edit</button>
+                                      <button style={cancelButtonStyle} onClick={() => handleCancelEvent(event._id)}><FaTimes/> Cancel</button>
                                       <button style={deleteButtonStyle} onClick={() => handleDeleteEvent(event._id)}><FaRegTrashAlt /> Delete</button>
                                     </div>
                                   </div>

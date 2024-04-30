@@ -1,11 +1,13 @@
 import React from "react";
 import { BsGrid } from "react-icons/bs";
-import { FaAngleRight, FaCalendarCheck, FaUsers, FaCalendarPlus, FaGem  } from "react-icons/fa";
+import { FaAngleRight, FaCalendarCheck, FaUsers, FaCalendarPlus, FaGem, FaHome } from "react-icons/fa";
 import logoImg from "../assets/logo.png";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 function DashboardNav() {
+  const { isLoggedIn, logout, userToken } = useAuth();
   return (
     <header className="dashboard-nav">
       <div className="container">
@@ -17,6 +19,12 @@ function DashboardNav() {
             <h3 className="nav-title">main menu</h3>
           </div>
           <div className="dashboard-navlink-wp">
+           
+          <div className="dashboard-navlink">
+              <Link to="/">
+                <FaHome /> <span>Home</span> <FaAngleRight />
+              </Link>
+            </div>
             <div className="dashboard-navlink">
               <Link to="/dashboard">
                 <BsGrid /> <span>dashboard</span> <FaAngleRight />
@@ -38,8 +46,8 @@ function DashboardNav() {
               </Link>
             </div>
           </div>
-          <div className="navlog">
-            <a href="/login">
+          <div className="navlog" >
+            <a href="/login" onClick={logout}>
               <BiLogOut /> <span>Logout</span>
             </a>
           </div>

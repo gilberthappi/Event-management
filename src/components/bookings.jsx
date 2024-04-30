@@ -145,7 +145,7 @@ const handleCancelBooking = async (bookId) => {
     borderRadius: "4px",
     border: "none",
     cursor: "pointer",
-    marginRight: "8px",
+    marginRight: "50px",
   };
 
   const EditButtonStyle = {
@@ -155,8 +155,19 @@ const handleCancelBooking = async (bookId) => {
     borderRadius: "4px",
     border: "none",
     cursor: "pointer",
-    marginRight: "8px",
+    marginRight: "50px",
   };
+
+  const cancelButtonStyle = {
+    backgroundColor: "#dc3545",
+    color: "white",
+    padding: "8px 16px",
+    borderRadius: "4px",
+    border: "none",
+    cursor: "pointer",
+    marginRight: "35px",
+  };
+
 
   const deleteButtonStyle = {
     backgroundColor: "#dc3545",
@@ -240,7 +251,7 @@ const handleCancelBooking = async (bookId) => {
           <ul>
             {bookings.length > 0 ? (
               bookings.map((book) => (
-                <div className="friend-box1" key={book._id}>
+                <div className="friend-box" key={book._id}>
                   <li>
                     <div>
                       <img src={book.backdropImage} alt={book.title} style={{ width: "100%" }} />
@@ -255,12 +266,10 @@ const handleCancelBooking = async (bookId) => {
                         <p>Status: {book.Status}</p>
                       </div>
                       <div>
-                        <button style={buttonStyle} onClick={() => openModal(book)}>
-                          <FaEye /> View
-                        </button>
+                        <button style={buttonStyle} onClick={() => openModal(book)}><FaEye /> View</button>
                         <button style={EditButtonStyle} onClick={() => handleEditBook(book)}><FaEdit /> Edit</button>
+                        <button style={cancelButtonStyle} onClick={() => handleCancelBooking(book._id)}><FaTimes/> Cancel</button>
                         <button style={deleteButtonStyle} onClick={() => handleDeleteBook(book._id)}><FaRegTrashAlt /> Delete</button>
-                        <button style={deleteButtonStyle} onClick={() => handleCancelBooking(book._id)}><FaTimes/>Cancel</button>
                       </div>
                     </div>
                   </li>

@@ -169,9 +169,9 @@ function Dashboard() {
                       </div>
                       <hr />
                       <div className="lower-content-data">
-                        <a href="/">
+                      <Link to="/users">
                           see more <BsArrowRightShort />
-                        </a>
+                      </Link>
                       </div>
                     </div>
                   </div>
